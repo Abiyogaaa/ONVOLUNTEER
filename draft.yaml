@@ -1,0 +1,69 @@
+models:
+  Users:
+    name: string
+    email: string
+    password: string
+    date_of_birth: date
+    gender: enum:Laki-laki,Perempuan
+    address: text
+    phone_number: string
+    profile_picture: nullable text
+    bio: nullable text
+    skills: text
+    interests: text
+    role: enum:admin,relawan,organisasi
+    relationships:
+      hasOne: Organization
+      hasMany:
+        - ActivityRegistration
+        - Testimonial
+
+  Organization:
+    user_id: foreign
+    name: string
+    description: text
+    address: text
+    phone_number: string
+    logo: nullable text
+    website: nullable string
+    activity_field: string
+    relationships:
+      hasMany: Activity
+      belongsTo: Users
+
+  Activity:
+    organization_id: foreign
+    title: string
+    description: text
+    location: text
+    start_date: date
+    end_date: date
+    start_time: time
+    end_time: time
+    volunteer_needed: integer
+    required_skills: text
+    status: enum:aktif,selesai,batal
+    relationships:
+      belongsTo: Organization
+      hasMany:
+        - ActivityRegistration
+        - Testimonial
+
+  ActivityRegistration:
+    user_id: foreign
+    activity_id: foreign
+    status: enum:pending,diterima,ditolak
+    relationships:
+      belongsTo:
+        - Users
+        - Activity
+
+  Testimonial:
+    user_id: foreign
+    activity_id: foreign
+    content: text
+    rating: integer
+    relationships:
+      belongsTo:
+        - Users
+        - Activity
